@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public final class Constants {
@@ -41,7 +42,10 @@ public final class Constants {
     public final static int POV_LEFT = 270;
   }
 
-  public static class Elevator {
+  public final static class RobotContainerConstants {
+  }
+
+  public static class ElevatorConstants {
     public static final ShuffleboardTab ELEVATOR_SHUFFLEBOARD_TAB = Shuffleboard.getTab("Eleavator");
     public static final GenericEntry elevatorPosition_entery = ELEVATOR_SHUFFLEBOARD_TAB
         .add("Elevator Position", 0)
@@ -53,7 +57,7 @@ public final class Constants {
         .withPosition(2, 0)
         .withSize(2, 1)
         .getEntry();
-    public static final GenericEntry kp_entry = ELEVATOR_SHUFFLEBOARD_TAB
+    public static final GenericEntry kP_entry = ELEVATOR_SHUFFLEBOARD_TAB
         .add("Elevator kP", 0)
         .withPosition(0, 1)
         .withSize(1, 1)
@@ -68,6 +72,10 @@ public final class Constants {
         .withPosition(2, 1)
         .withSize(1, 1)
         .getEntry();
+    public static final ShuffleboardLayout ELEVATOR_PID_LAYOUT = ELEVATOR_SHUFFLEBOARD_TAB
+        .getLayout("Elevator PID", "Grid")
+        .withPosition(0, 2)
+        .withSize(3, 2);
 
     // Constants
     public final static int leaderCanID = 1;

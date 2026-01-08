@@ -18,16 +18,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.Elevator.*;
+import static frc.robot.Constants.ElevatorConstants.*;
 
 /**
  * Elevator subsystem using dual TalonFX with Kraken X60 motors
@@ -60,6 +58,10 @@ public class ElevatorSubsystem extends SubsystemBase {
    * Creates a new Elevator Subsystem.
    */
   public ElevatorSubsystem() {
+    ELEVATOR_PID_LAYOUT.add("Elevator kP", kP_entry.getDouble(0));
+    ELEVATOR_PID_LAYOUT.add("Elevator kI", kI_entry.getDouble(0));
+    ELEVATOR_PID_LAYOUT.add("Elevator kD", kD_entry.getDouble(0));
+
     // Initialize motor controllers
     leader = new TalonFX(leaderCanID);
     follower = new TalonFX(followerCanID);
@@ -75,14 +77,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     statorCurrentSignal = leader.getStatorCurrent();
     temperatureSignal = leader.getDeviceTemp();
 
+    FlashConfigs();
+
+    // Initialize simulation (uses both motors)
+    elevatorSim = new ElevatorSim(
+        dcMotor, // Motor type (2x Kraken X60)
+        gearRatio,
+        carriageMass, // Carriage mass (kg)
+        drumRadius, // Drum radius (m)
+        minHeight, // Min height (m)
+        maxHeight, // Max height (m)
+        true, // Simulate gravity
+        0 // Starting height (m)
+    );
+  }
+
+  public void FlashConfigs() {
     // Configure leader motor
     TalonFXConfiguration leaderConfig = new TalonFXConfiguration();
 
     // Configure PID for slot 0
     Slot0Configs slot0 = leaderConfig.Slot0;
-    slot0.kP = kP;
-    slot0.kI = kI;
-    slot0.kD = kD;
+    slot0.kP = kP_entry.getDouble(0.0);
+    slot0.kI = kI_entry.getDouble(0.0);
+    slot0.kD = kD_entry.getDouble(0.0);
     slot0.GravityType = GravityTypeValue.Elevator_Static;
     slot0.kS = kS;
     slot0.kV = kV;
@@ -146,18 +164,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Reset encoder position
     leader.setPosition(0);
-
-    // Initialize simulation (uses both motors)
-    elevatorSim = new ElevatorSim(
-        dcMotor, // Motor type (2x Kraken X60)
-        gearRatio,
-        carriageMass, // Carriage mass (kg)
-        drumRadius, // Drum radius (m)
-        minHeight, // Min height (m)
-        maxHeight, // Max height (m)
-        true, // Simulate gravity
-        0 // Starting height (m)
-    );
   }
 
   /**

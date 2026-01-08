@@ -7,12 +7,22 @@ package frc.robot;
 import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.elevator.ManulElevaorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
+
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class RobotContainer {
+  ShuffleboardLayout elevatorCommands = Shuffleboard.getTab("Eleavator")
+      .getLayout("Elevator Commands", BuiltInLayouts.kList)
+      .withSize(2, 2)
+      .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
   // The robot's subsystems and commands are defined here...
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
@@ -28,6 +38,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    elevatorCommands.add(new InstantCommand(() -> m_ElevatorSubsystem.FlashConfigs()));
     m_ElevatorSubsystem
         .setDefaultCommand(new ManulElevaorCommand(() -> m_driverController.getLeftX(), m_ElevatorSubsystem));
   }
