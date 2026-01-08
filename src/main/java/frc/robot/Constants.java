@@ -42,9 +42,6 @@ public final class Constants {
     public final static int POV_LEFT = 270;
   }
 
-  public final static class RobotContainerConstants {
-  }
-
   public static class ElevatorConstants {
     public static final ShuffleboardTab ELEVATOR_SHUFFLEBOARD_TAB = Shuffleboard.getTab("Eleavator");
     public static final GenericEntry elevatorPosition_entery = ELEVATOR_SHUFFLEBOARD_TAB
@@ -81,7 +78,7 @@ public final class Constants {
     public final static int leaderCanID = 1;
     public final static int followerCanID = 2;
     public final static double gearRatio = 4.45;
-    // for right now thus is blank because we will tune it from shuffleboard
+    // for right now this is blank because we will tune it from shuffleboard
     /*
      * PID Constants - tuned for Kraken X60
      * public final static double kP = 50.0; // Higher P for position control
