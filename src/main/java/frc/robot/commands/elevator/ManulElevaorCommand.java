@@ -12,6 +12,7 @@ public class ManulElevaorCommand extends Command {
     public ManulElevaorCommand(DoubleSupplier joystickSupplier, ElevatorSubsystem elevatorSubsystem) {
         this.m_ElevatorSubsystem = elevatorSubsystem;
         this.joystickSupplier = joystickSupplier;
+        addRequirements(m_ElevatorSubsystem);
     }
 
     @Override

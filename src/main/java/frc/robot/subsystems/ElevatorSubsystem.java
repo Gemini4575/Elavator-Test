@@ -165,6 +165,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    elevatorPosition_entery.setDouble(getPositionMeters());
     BaseStatusSignal.refreshAll(
         positionSignal,
         velocitySignal,

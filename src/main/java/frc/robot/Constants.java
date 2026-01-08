@@ -7,21 +7,10 @@ package frc.robot;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
   public final static class JoystickConstants {
     public final static int DRIVER_USB = 0;
@@ -59,16 +48,38 @@ public final class Constants {
         .withPosition(0, 0)
         .withSize(2, 1)
         .getEntry();
+    public static final GenericEntry elevatorTargetPosition_entery = ELEVATOR_SHUFFLEBOARD_TAB
+        .add("Elevator Target Position", 0)
+        .withPosition(2, 0)
+        .withSize(2, 1)
+        .getEntry();
+    public static final GenericEntry kp_entry = ELEVATOR_SHUFFLEBOARD_TAB
+        .add("Elevator kP", 0)
+        .withPosition(0, 1)
+        .withSize(1, 1)
+        .getEntry();
+    public static final GenericEntry kI_entry = ELEVATOR_SHUFFLEBOARD_TAB
+        .add("Elevator kI", 0)
+        .withPosition(1, 1)
+        .withSize(1, 1)
+        .getEntry();
+    public static final GenericEntry kD_entry = ELEVATOR_SHUFFLEBOARD_TAB
+        .add("Elevator kD", 0)
+        .withPosition(2, 1)
+        .withSize(1, 1)
+        .getEntry();
 
     // Constants
     public final static int leaderCanID = 1;
     public final static int followerCanID = 2;
-    public final static double gearRatio = 15.0;
-
-    // PID Constants - tuned for Kraken X60
-    public final static double kP = 50.0; // Higher P for position control
-    public final static double kI = 0.0;
-    public final static double kD = 2.0; // Some D for damping
+    public final static double gearRatio = 4.45;
+    // for right now thus is blank because we will tune it from shuffleboard
+    /*
+     * PID Constants - tuned for Kraken X60
+     * public final static double kP = 50.0; // Higher P for position control
+     * public final static double kI = 0.0;
+     * public final static double kD = 2.0; // Some D for damping
+     */
 
     // Feedforward Constants - typical for Kraken X60
     public final static double kS = 0.25; // Volts to overcome static friction
@@ -88,21 +99,10 @@ public final class Constants {
     public final static double supplyCurrentLimit = 50; // Amps
 
     // Mechanical constants
-    public final static double drumRadius = Units.inchesToMeters(1.0); // 1 inch drum radius
+    public final static double drumRadius = Units.inchesToMeters(0.675); // 1 inch drum radius
     public final static double minHeight = 0.0; // meters
     public final static double maxHeight = 1.2; // meters
-    public final static double carriageMass = 8.0; // kg - adjust based on your carriage
+    public final static double carriageMass = Units.lbsToKilograms(3.323); // kg - adjust based on your carriage
 
-    public static final double pidP = 0.0;
-    public static final double pidI = 0.0;
-
-    public static final int CAN_ID_LEFT = 1;
-    public static final int CAND_ID_RIGHT = 2;
-
-    public static final double GEAR_RATIO = 1;
-  }
-
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
   }
 }

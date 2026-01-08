@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.JoystickConstants;
 import frc.robot.commands.elevator.ManulElevaorCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,7 +17,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
+  private final XboxController m_driverController = new XboxController(JoystickConstants.DRIVER_USB);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
