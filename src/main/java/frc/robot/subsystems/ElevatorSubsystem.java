@@ -18,6 +18,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -58,7 +60,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    * Creates a new Elevator Subsystem.
    */
   public ElevatorSubsystem() {
-    ELEVATOR_PID_LAYOUT.add("Elevator kP", kP_entry.getDouble(0));
+    ELEVATOR_PID_LAYOUT.add("Elevator kP", kP_entry.getDouble(3));
     ELEVATOR_PID_LAYOUT.add("Elevator kI", kI_entry.getDouble(0));
     ELEVATOR_PID_LAYOUT.add("Elevator kD", kD_entry.getDouble(0));
 
@@ -98,7 +100,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     // Configure PID for slot 0
     Slot0Configs slot0 = leaderConfig.Slot0;
-    slot0.kP = kP_entry.getDouble(0.0);
+    slot0.kP = kP_entry.getDouble(3.0);
     slot0.kI = kI_entry.getDouble(0.0);
     slot0.kD = kD_entry.getDouble(0.0);
     slot0.GravityType = GravityTypeValue.Elevator_Static;
@@ -171,7 +173,9 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    elevatorPosition_entery.setDouble(getPositionMeters());
+    elevatorPositionM_entery.setDouble(getPositionMeters());
+    elevatorPositionIN_entry.setDouble(Units.metersToInches(getPositionMeters()));
+    rotation_entry.setDouble(getPositionRotations());
     BaseStatusSignal.refreshAll(
         positionSignal,
         velocitySignal,
@@ -233,7 +237,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   @Logged(name = "Position/Rotations")
   public double getPositionRotations() {
-    return positionSignal.getValueAsDouble();
+    return leader.getRotorPosition().getValueAsDouble();
   }
 
   /**
@@ -243,7 +247,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   @Logged(name = "Position/Meters")
   public double getPositionMeters() {
-    return rotationsToMeters(positionSignal.getValueAsDouble());
+    return rotationsToMeters(getPositionRotations());
   }
 
   /**
@@ -348,6 +352,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     double ffVolts = feedforward.calculate(velocityMetersPerSecond, accelerationMetersPerSecondSquared);
 
     // Send control request with feedforward
+
     leader.setControl(velocityRequest.withVelocity(velocityRotations).withFeedForward(ffVolts));
   }
 
@@ -406,11 +411,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void moveWithJoysticks(double value) {
-    double deadband = 0.05;
+    double deadband = 0.005;
     if (Math.abs(value) < deadband) {
       setVelocity(0);
     } else {
-      double velocity = value / maxVelocity;
+      double velocity = value / 10 / maxVelocity;
       setVelocity(velocity);
     }
   }

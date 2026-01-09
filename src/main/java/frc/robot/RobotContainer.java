@@ -22,7 +22,7 @@ public class RobotContainer {
   ShuffleboardLayout elevatorCommands = Shuffleboard.getTab("Eleavator")
       .getLayout("Elevator Commands", BuiltInLayouts.kList)
       .withSize(2, 2)
-      .withProperties(Map.of("Label position", "HIDDEN")); // hide labels for commands
+      .withProperties(Map.of("Label position", "LEFT")); // hide labels for commands
   // The robot's subsystems and commands are defined here...
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
 
@@ -38,7 +38,9 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    elevatorCommands.add(new InstantCommand(() -> m_ElevatorSubsystem.FlashConfigs()));
+    elevatorCommands.add("Flash Configs", new InstantCommand(() -> m_ElevatorSubsystem.FlashConfigs()));
+    elevatorCommands.add("Move to middle", m_ElevatorSubsystem.moveToHeightCommand(0.5));
+    elevatorCommands.add("Move to 0", m_ElevatorSubsystem.moveToHeightCommand(0.0));
     m_ElevatorSubsystem
         .setDefaultCommand(new ManulElevaorCommand(() -> m_driverController.getLeftX(), m_ElevatorSubsystem));
   }
